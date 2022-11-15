@@ -15,6 +15,30 @@ const Persons = ({persons}) => {
   </ul>)
 }
 
+const Filter = ({newFilter, handleFilterChange}) => {
+  return (
+    <div>
+      filter shown with <input value={newFilter} onChange={handleFilterChange}/>
+    </div>
+  )
+}
+
+const PersonForm = ({addName, newName, newNum, handleNameChange, handleNumChange}) => {
+  return (
+    <form onSubmit={addName}>
+      <div>
+        name: <input value={newName} onChange={handleNameChange}/>
+      </div>
+      <div>
+      number: <input value={newNum} onChange={handleNumChange}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
 const dummyNames = [
   {name: 'Arto Hellas', number: '040-1234567'},
   {name: 'Jimmy Bean', number: '32465123' },
@@ -57,10 +81,7 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value);
-    // alert("filter data");
   }
-
-  // const namesToShow = persons;
 
   const namesToShow = (newFilter === "")
     ? persons
@@ -73,34 +94,16 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        filter shown with <input value={newFilter} onChange={handleFilterChange}/>
-      </div>
+      <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>
       <h2>Add a New</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-        number: <input value={newNum} onChange={handleNumChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm addName={addName} newName={newName} newNum={newNum}
+        handleNameChange={handleNameChange}
+        handleNumChange={handleNumChange} />
+
       <h2>Numbers</h2>
       <Persons persons={namesToShow} />
-      <div>debug: {newName}</div>
-      <div>debug: {newNum}</div>
-      <div>debug: {newFilter}</div>
     </div>
   )
 }
 
 export default App
-
-// {persons.map( person => {
-//   <li key={person.id}>{person.name}</li>
-// })}
-
-    // return <li key={person.name}>{person.name}</li>
