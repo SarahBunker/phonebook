@@ -24,6 +24,25 @@ const App = () => {
 
   useEffect(getPeople,[]);
 
+  const getPersonID = () => {
+    let id = null;
+    persons.forEach((item, i) => {
+      if (item.name === newName) id = item.id;
+    });
+    return id;
+  }
+
+  const updateNumber = (newObject) => {
+    let choice = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+    if (!choice) return;
+    let id = getPersonID();
+    personService
+      .update(id, newObject)
+      .then( data => console.log(`updated ${newName}`))
+      .then( () => getPeople())
+      .catch( err => console.log(`couldn't updated ${newName}`, err))
+  }
+
   const addName = (event) => {
     event.preventDefault();
     const newObject = {
@@ -31,7 +50,7 @@ const App = () => {
       number: newNum,
     }
     if (checkRepeatName()) {
-      alert(`${newName} is already added to the phonebook`)
+      updateNumber(newObject);
       return;
     }
     personService
@@ -42,7 +61,7 @@ const App = () => {
         setNewName("");
         setNewNum("");
       })
-      .catch( err => console.log("contact was not added"));
+      .catch( err => console.log(`${newName} was not added`));
   }
 
   const handleNameChange = (event) => {
