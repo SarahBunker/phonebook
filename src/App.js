@@ -3,7 +3,7 @@ import axios from 'axios'
 import Persons from './components/persons'
 import Filter from './components/filter'
 import PersonForm from './components/person_form'
-
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -15,12 +15,13 @@ const App = () => {
     let names = persons.map( person => person.name);
     return (names.includes(newName));
   }
+
   const getPeople = function() {
-    axios.get("http://localhost:3001/persons")
-      .then( response => {
-        setPersons(response.data);
-      })
+    personService.getAll()
+      .then( data => setPersons(data))
+      .catch( err => console.log("couldn't get all persons", err))
   }
+
   useEffect(getPeople,[]);
 
   const addName = (event) => {
@@ -33,9 +34,24 @@ const App = () => {
       alert(`${newName} is already added to the phonebook`)
       return;
     }
-    setPersons(persons.concat(newObject));
-    setNewName("");
-    setNewNum("");
+    personService
+      .create(newObject)
+      .then( data => {
+        console.log("contact added succesfully");
+        setPersons(persons.concat(newObject));
+        setNewName("");
+        setNewNum("");
+      })
+      .catch( err => console.log("contact was not added"));
+    // axios
+    //   .post('http://localhost:3001/persons', newObject)
+    //   .then( response => {
+    //     console.log("contact added succesfully");
+    //     setPersons(persons.concat(newObject));
+    //     setNewName("");
+    //     setNewNum("");
+    //   })
+    //   .catch( err => console.log("contact was not added"));
   }
 
   const handleNameChange = (event) => {
