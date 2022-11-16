@@ -38,20 +38,11 @@ const App = () => {
       .create(newObject)
       .then( data => {
         console.log("contact added succesfully");
-        setPersons(persons.concat(newObject));
+        getPeople();
         setNewName("");
         setNewNum("");
       })
       .catch( err => console.log("contact was not added"));
-    // axios
-    //   .post('http://localhost:3001/persons', newObject)
-    //   .then( response => {
-    //     console.log("contact added succesfully");
-    //     setPersons(persons.concat(newObject));
-    //     setNewName("");
-    //     setNewNum("");
-    //   })
-    //   .catch( err => console.log("contact was not added"));
   }
 
   const handleNameChange = (event) => {
@@ -84,7 +75,7 @@ const App = () => {
         handleNumChange={handleNumChange} />
 
       <h2>Numbers</h2>
-      <Persons persons={namesToShow} />
+      <Persons persons={persons} setPersons={setPersons} namesToShow={namesToShow}/>
     </div>
   )
 }
