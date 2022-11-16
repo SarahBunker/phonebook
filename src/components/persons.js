@@ -4,19 +4,22 @@ const Button = ({clickFunction, text}) => {
   return <button onClick={clickFunction}>{text}</button>
 }
 
-const DeleteButton = ({id, namesToShow, persons, setPersons}) => {
+const DeleteButton = ({id, name, namesToShow, persons, setPersons}) => {
   function clickDelete () {
+    let index = findIndex(id, persons);
+    if (!index) console.log("index error");
+
+    let confirmation = window.confirm(`Delete ${name}?`);
+    if (!confirmation) return;
     personService
       .remove(id)
       .then( data => {
-        console.log("person removed")
-        let index = findIndex(id, persons);
-        if (!index) console.log("index error");
+        console.log(`${name} removed`)
         let copyPersons = [...persons];
         copyPersons.splice(index,1);
         setPersons(copyPersons);
       })
-      .catch( err => console.log("can't remove this person", err))
+      .catch( err => console.log(`can't remove ${name}`, err))
   }
   return <Button clickFunction={clickDelete} text="delete"/>
 }
@@ -31,7 +34,7 @@ function findIndex(id, persons) {
 
 const Person = ({person, persons, setPersons, namesToShow}) => {
   return (
-    <li>{person.name} {person.number} <DeleteButton id={person.id} persons={persons} setPersons={setPersons} namesToShow={namesToShow}/></li>
+    <li>{person.name} {person.number} <DeleteButton id={person.id} persons={persons} setPersons={setPersons} name={person.name} namesToShow={namesToShow}/></li>
   )
 }
 

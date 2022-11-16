@@ -37,7 +37,7 @@ const App = () => {
     personService
       .create(newObject)
       .then( data => {
-        console.log("contact added succesfully");
+        console.log(`${newName} added succesfully`);
         getPeople();
         setNewName("");
         setNewNum("");
